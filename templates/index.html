@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overclock Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .chart-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Overclock Dashboard</h1>
+    <p>Your focus data.</p>
+
+    <div class="chart-container">
+        <canvas id="focusChart"></canvas>
+    </div>
+
+    <script>
+        // get data passed from flask server
+        const labels = {{ chart_labels | safe }};
+        const data = {{ chart_data | safe }};
+         
+        // create chart
+        const ctx = document.getElementById('focusChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar', // can change to line/bar 
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Minutes Focused',
+                    data: data,
+                    backgroundColor: 'rgba(0, 255, 136, 0.5)', // green
+                    borderColor: 'rgba(0, 255, 136, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Minutes' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
