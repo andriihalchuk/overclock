@@ -29,11 +29,20 @@
     <h1>Overclock Dashboard</h1>
     <p>Your focus data.</p>
 
-    <div class="chart-container">
-        <canvas id="focusChart"></canvas>
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+
+        <div class="chart-container" style="width: 45%; min-width: 300px;">
+            <canvas id="focusChart"></canvas>
+        </div>
+
+        <div class="chart-container" style="width: 30%; min-width: 300px;">
+            <canvas id="reasonChart"></canvas>
+        </div>
+
     </div>
 
     <script>
+        // bar chart for focus time
         // get data passed from flask server
         const labels = {{ chart_labels | safe }};
         const data = {{ chart_data | safe }};
@@ -58,6 +67,28 @@
                         beginAtZero: true,
                         title: { display: true, text: 'Minutes' }
                     }
+                }
+            }
+        });
+        // pie chart for failure reasons
+        const pieLabels = {{ pie_labels | tojson }};
+        const pieData = {{ pie_data | tojson }};
+
+        const ctx2 = document.getElementById('reasonChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    data: pieData,
+                    // different colors for different failure reasons
+                    backgroundColor: ['#ff4d4d', '#ff9933', '#ffcc00', '#33cc33', '#3399ff'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { labels: { color: 'white' } }
                 }
             }
         });

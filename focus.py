@@ -278,14 +278,18 @@ def start_session():
             log_session(session_seconds, completed_tasks, missed_tasks, reason)
     # ensure sites are unblocked even when forcefully exited
     finally:
+
         unblock_sites()
 
         dashboard_view_choice = questionary.confirm("Would you like to view your overclock dashboard?").ask()
 
         if dashboard_view_choice:
             print("\nOpening your dashboard...")
-            time.sleep(1)
-            webbrowser.open("http://127.0.0.1:5000")
+            try:
+                os.system("python dashboard.py")
+                webbrowser.open_new("http://127.0.0.1:5000")
+            except KeyboardInterrupt:
+                print("\nExited dashboard")
 
 if __name__ == "__main__":
     start_session()
