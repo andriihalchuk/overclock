@@ -29,6 +29,30 @@ def is_admin():
     else:
         return os.geteuid() == 0 # mac and linux
     
+# find AppData directory to stare the database
+def get_app_dir():
+    home = os.path.expanduser("~")
+    system = platform.system()
+
+    if system == "Windows":
+        # go to AppData\Local
+        base = os.environ.get("LOCALAPPDATA", os.path.join(home, "AppData", "Local"))
+    elif system == "Darwin":
+        # go to ~/Library/Application Support (mac)
+        base = os.path.join(home, "Library", "Application Support")
+    else:
+        # go to ~/.local/share (linux)
+        base = os.environ.get("XDG_DATA_HOME", os.path.join(home, ".local", "share"))
+
+    app_dir = os.path.join(base, "Overclock")
+
+    #create folder if it does not exist yet
+    os.makedirs(app_dir, exist_ok=True)
+    return app_dir
+
+APP_DIR = get_app_dir
+DB_PATH = os.path.join(APP_DIR, "overclock.db")
+
 # block specified sites
 def block_sites(restricted_sites):
     if not is_admin():
@@ -106,7 +130,7 @@ def clean_up():
 # initialise data store
 def init_db():
     # create "database" file if it does not exist yet
-    conn = sqlite3.connect("overclock.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     # create table with data we want to save
@@ -126,7 +150,7 @@ def init_db():
 
 # log information from lockin session to the store
 def log_session(duration, completed, missed, reason):
-    conn = sqlite3.connect("overclock.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     # get current date and time
