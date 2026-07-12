@@ -15,7 +15,7 @@ Overclock is a terminal app that helps you focus by completely blocking distract
 
 You don't need to install Python to use Overclock. It comes as a standalone executable.
 
-1. Go to the [Releases page](https://www.google.com/search?q=../../releases/latest).
+1. Go to the [Releases page](https://github.com/andriihalchuk/overclock/releases/latest).
 2. Download the right file for your operating system:
 * **Windows:** `overclock-windows.exe`
 * **macOS:** `overclock-mac`
