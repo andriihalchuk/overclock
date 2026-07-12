@@ -18,8 +18,8 @@ else:
     HOST_PATH = "/etc/hosts" # mac and linux
 
 REDIRECT_IP = "127.0.0.1" # local host
-STARTED_MARKER = "\n# --- FOCUS MODE ACTIVATED --- \n"
-ENDED_MARKER   = "# --- FOCUS MODE DISABLED --- \n"
+STARTED_MARKER = "# --- FOCUS MODE ACTIVATED ---"
+ENDED_MARKER   = "# --- FOCUS MODE DISABLED ---"
 
 # check if the user has admin previleges
 def is_admin():
@@ -64,7 +64,7 @@ def block_sites(restricted_sites) -> bool:
 
     # read current file
     with open(HOST_PATH, "r") as file:
-        content = file.readlines()
+        content = file.read()
 
     # cannot double-block
     if STARTED_MARKER in content:
@@ -72,7 +72,7 @@ def block_sites(restricted_sites) -> bool:
             return True
 
     with open(HOST_PATH, "a") as file:
-        file.write(STARTED_MARKER)
+        file.write(f"{STARTED_MARKER}\n")
         for site in restricted_sites:
             # make host ip address an ip address of each forbidden site
             file.write(f"{REDIRECT_IP} {site}\n") 
@@ -82,7 +82,7 @@ def block_sites(restricted_sites) -> bool:
             file.write(f"{REDIRECT_IP} m.{site}\n")
 
             file.write(f"{REDIRECT_IP} login.{site}\n")  
-        file.write(ENDED_MARKER)
+        file.write(f"{ENDED_MARKER}\n")
 
     print("Focus mode is activated. Work hard")
     return True
@@ -99,17 +99,18 @@ def unblock_sites():
     with open(HOST_PATH, "w") as file:
         in_focus_block = False
         for line in content:
-            if line == STARTED_MARKER:
+            if STARTED_MARKER in line:
                 in_focus_block = True
+                continue
+
+            if ENDED_MARKER in line:
+                in_focus_block = False
                 continue
 
             # ignore all lines in focus block
             if not in_focus_block:
                 file.write(line)
 
-            if line == ENDED_MARKER:
-                in_focus_block = False
-        
     print("Focus mode is disabled")
 
 '''
