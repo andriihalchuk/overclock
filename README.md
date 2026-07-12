@@ -4,7 +4,7 @@ Overclock is a terminal app that helps you focus by completely blocking distract
 
 ## Features
 
-* **System-level blocking:** Reroutes distracting sites to `127.0.0.1` via your `hosts` file, making them impossible to reach.
+* **System-level blocking:** Reroutes distracting sites to `127.0.0.1` through your `hosts` file, making them impossible to reach.
 * **Local analytics:** An offline dashboard lets you review your session lengths and track the reasons behind any missed tasks.
 * **Emergency abort:** You can end a session early and unblock everything if you absolutely need to.
 * **Cross-platform:** Runs natively on Windows, macOS, and Linux.
@@ -15,8 +15,8 @@ Overclock is a terminal app that helps you focus by completely blocking distract
 
 You don't need to install Python to use Overclock. It comes as a standalone executable.
 
-1. Head to the [Releases page](https://www.google.com/search?q=../../releases/latest).
-2. Grab the right file for your operating system:
+1. Go to the [Releases page](https://www.google.com/search?q=../../releases/latest).
+2. Download the right file for your operating system:
 * **Windows:** `overclock-windows.exe`
 * **macOS:** `overclock-mac`
 * **Linux:** `overclock-linux`
@@ -27,7 +27,7 @@ You don't need to install Python to use Overclock. It comes as a standalone exec
 
 ## !! Important OS Warnings & How to Run
 
-Since Overclock needs to edit a core system file (the `hosts` file) to do its job, your operating system will probably flag it as suspicious. This is completely normal for apps that do this kind of thing. Here is how to get it running:
+Since Overclock needs to edit a system file (the `hosts` file) to do its job, your operating system will probably flag it as suspicious. This is completely normal for apps that do this kind of thing. Here is how to get it running:
 
 ### Windows
 
@@ -74,7 +74,7 @@ sudo ./overclock-linux
 2. Type in the tasks you want to get done (separate them with a semicolon).
 3. Choose your focus duration or set a custom time.
 4. Tick the websites you want to block.
-5. Get to work. The app will quietly run in the background until your time is up.
+5. Get to work. The app will run in the background until your time is up.
 6. Once finished, tick off your completed tasks and check your dashboard if you'd like.
 
 ---
