@@ -1,0 +1,47 @@
+name: Build and Release Overclock
+
+# run this script only when the tag is updated
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # virtual machines
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller flask questionary
+
+    - name: Build with PyInstaller (Windows)
+      if: matrix.os == 'windows-latest'
+      # semicolon and UAC admin flag
+      run: pyinstaller --onefile --uac-admin --add-data "templates;templates" overclock.py
+
+    - name: Build with PyInstaller (Mac/Linux)
+      if: matrix.os != 'windows-latest'
+      # colon and standard flags
+      run: pyinstaller --onefile --add-data "templates:templates" overclock.py
+
+    - name: Upload to GitHub Releases
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/overclock* # upload the .exe on Windows and the binaries on Mac/Linux
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
