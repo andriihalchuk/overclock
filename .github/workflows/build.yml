@@ -34,17 +34,19 @@ jobs:
 
     - name: Build with PyInstaller (Windows)
       if: matrix.os == 'windows-latest'
-      # semicolon and UAC admin flag
-      run: pyinstaller --onefile --uac-admin --add-data "templates;templates" overclock.py
+      run: pyinstaller --onefile --uac-admin --add-data "templates;templates" --name overclock-windows overclock.py
 
-    - name: Build with PyInstaller (Mac/Linux)
-      if: matrix.os != 'windows-latest'
-      # colon and standard flags
-      run: pyinstaller --onefile --add-data "templates:templates" overclock.py
+    - name: Build with PyInstaller (Mac)
+      if: matrix.os == 'macos-latest'
+      run: pyinstaller --onefile --add-data "templates:templates" --name overclock-mac overclock.py
+
+    - name: Build with PyInstaller (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: pyinstaller --onefile --add-data "templates:templates" --name overclock-linux overclock.py
 
     - name: Upload to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/overclock* # upload the .exe on Windows and the binaries on Mac/Linux
+        files: dist/overclock-* # start filename with "overclock-" and os
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
